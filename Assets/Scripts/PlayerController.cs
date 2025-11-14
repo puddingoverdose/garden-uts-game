@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
@@ -34,18 +35,22 @@ public class PlayerController : MonoBehaviour
     {
         if (!isRecoiling)
         {
-            // Get input using keyboard directly (works with both old and new Input System)
-            movement.x = 0f;
-            movement.y = 0f;
+            // Get input using new Input System
+            movement = Vector2.zero;
             
-            if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
-                movement.y = 1f;
-            if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
-                movement.y = -1f;
-            if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
-                movement.x = -1f;
-            if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
-                movement.x = 1f;
+            // Check keyboard using new Input System
+            Keyboard keyboard = Keyboard.current;
+            if (keyboard != null)
+            {
+                if (keyboard.wKey.isPressed || keyboard.upArrowKey.isPressed)
+                    movement.y = 1f;
+                if (keyboard.sKey.isPressed || keyboard.downArrowKey.isPressed)
+                    movement.y = -1f;
+                if (keyboard.aKey.isPressed || keyboard.leftArrowKey.isPressed)
+                    movement.x = -1f;
+                if (keyboard.dKey.isPressed || keyboard.rightArrowKey.isPressed)
+                    movement.x = 1f;
+            }
             
             // Normalize diagonal movement
             movement = movement.normalized;
